@@ -7,7 +7,17 @@ pipeline {
     }
 
     stages {
-        
+        stage('Validate AWS Credentials') {
+            steps {
+                script {
+                    def awsCheck = sh(script: "aws sts get-caller-identity", returnStdout: true).trim()
+                    if (!awsCheck.contains("Account")) {
+                        error("AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.")
+                    }
+                    echo "AWS Credentials are valid: ${awsCheck}"
+                }
+            }
+        }
         stage('Checkout Code') {
             steps {
                 script {
