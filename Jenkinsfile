@@ -59,7 +59,7 @@ pipeline {
                     type ec2_public_ip.txt
                     echo [all] > hosts.ini
                     type hosts.ini
-                    for /f %%i in (ec2_public_ip.txt) do echo %%i >> hosts.ini
+                    echo ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
                 '''
             }
