@@ -14,15 +14,16 @@ pipeline {
                     string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
-                    sh '''
-                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                    script {
-                    def awsCheck = sh(script: "aws sts get-caller-identity", returnStdout: true).trim()
-                    if (!awsCheck.contains("Account")) {
-                        error("AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.")
-                    }
-                    echo "AWS Credentials are valid: ${awsCheck}"
+                    bat '''
+                    set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                    set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+                    for /f "tokens=*" %%i in ('aws sts get-caller-identity 2^>^&1') do set OUTPUT=%%i
+                    echo %OUTPUT% | findstr /C:"Account" > nul
+                    if errorlevel 1 (
+                        echo AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.
+                        exit /b 1
+                    )
+                    echo AWS Credentials are valid: %OUTPUT%
                     '''
                 }
             }
@@ -53,7 +54,7 @@ pipeline {
                         terraform apply -auto-approve
                         terraform output -raw public_ip > ec2_public_ip.txt
                     '''
-                    def ec2Ip = readFile('ec2_public_ip.txt').trim()
+                    def ec2Ip = readFile('terraform/ec2_public_ip.txt').trim()
                     env.EC2_PUBLIC_IP = ec2Ip
                 }
             }
@@ -65,7 +66,7 @@ pipeline {
                     bat '''
                         echo [all] > hosts.ini
                         echo %EC2_PUBLIC_IP% >> hosts.ini
-                        ansible-playbook -i hosts.ini install_nginx.yaml --key-file ~/.ssh/my-key.pem
+                        ansible-playbook -i hosts.ini install_nginx.yaml --private-key C:\\Users\\your-user\\.ssh\\your-key.pem
                     '''
                 }
             }
