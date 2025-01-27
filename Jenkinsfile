@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = "ap-south-1"
+        AWS_REGION = "us-east-1"
         EC2_PUBLIC_IP = ""
     }
 
@@ -10,7 +10,7 @@ pipeline {
         stage('Terraform') {
             steps {
                 script {
-                    sh '''
+                    bat '''
                         terraform init
                         terraform apply -auto-approve
                         terraform output -raw public_ip > ec2_public_ip.txt
@@ -24,8 +24,9 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    sh '''
-                        echo "[all]\n${EC2_PUBLIC_IP}" > hosts.ini
+                    bat '''
+                        echo [all] > hosts.ini
+                        echo %EC2_PUBLIC_IP% >> hosts.ini
                         ansible-playbook -i hosts.ini install_nginx.yaml --key-file ~/.ssh/my-key.pem
                     '''
                 }
@@ -35,11 +36,11 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
-                    sh '''
-                        aws deploy create-deployment \
-                            --application-name MyApp \
-                            --deployment-group-name MyDeploymentGroup \
-                            --deployment-config-name CodeDeployDefault.OneAtATime \
+                    bat '''
+                        aws deploy create-deployment ^
+                            --application-name MyApp ^
+                            --deployment-group-name MyDeploymentGroup ^
+                            --deployment-config-name CodeDeployDefault.OneAtATime ^
                             --github-location repository=my-github-repo,commitId=latest
                     '''
                 }
