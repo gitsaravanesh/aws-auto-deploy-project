@@ -5,8 +5,10 @@ pipeline {
         AWS_REGION = "ap-south-1"
         EC2_PUBLIC_IP = ""
     }
-
     
+    stages {
+
+        
     stage('Setup AWS Credentials') {
             steps {
                 withCredentials([
@@ -21,8 +23,7 @@ pipeline {
                 }
             }
         }
-    
-    stages {
+        
         stage('Validate AWS Credentials') {
             steps {
                 script {
