@@ -27,6 +27,7 @@ pipeline {
             steps {
                 script {
                     bat '''
+                        cd terraform
                         terraform init
                         terraform apply -auto-approve
                         terraform output -raw public_ip > ec2_public_ip.txt
