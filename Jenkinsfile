@@ -56,7 +56,8 @@ pipeline {
             steps {
                 bat '''
                 echo [all] > hosts.ini
-                for /f %%i in ('terraform output -raw public_ips') do echo %%i >> hosts.ini
+                for /f %%i in ('terraform output -raw public_ips -no-color 2^>^&1') do (
+                    echo %%i >> hosts.ini)
                 type hosts.ini
                 '''
             }
