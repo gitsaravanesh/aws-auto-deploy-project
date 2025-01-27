@@ -30,7 +30,3 @@ resource "aws_instance" "web_server" {
     Name = "Terraform-Jenkins-EC2"
   }
 }
-
-output "public_ip" {
-  value = aws_instance.web_server.public_ip
-}
