@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = "us-east-1"
+        AWS_REGION = "ap-south-1"
         EC2_PUBLIC_IP = ""
     }
 
