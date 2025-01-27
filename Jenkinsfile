@@ -7,9 +7,8 @@ pipeline {
     }
     
     stages {
-
         
-    stage('Setup AWS Credentials') {
+        stage('Setup AWS Credentials') {
             steps {
                 withCredentials([
                     string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
@@ -18,20 +17,13 @@ pipeline {
                     sh '''
                     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                     export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                    aws sts get-caller-identity
-                    '''
-                }
-            }
-        }
-        
-        stage('Validate AWS Credentials') {
-            steps {
-                script {
+                    script {
                     def awsCheck = sh(script: "aws sts get-caller-identity", returnStdout: true).trim()
                     if (!awsCheck.contains("Account")) {
                         error("AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.")
                     }
                     echo "AWS Credentials are valid: ${awsCheck}"
+                    '''
                 }
             }
         }
@@ -51,6 +43,7 @@ pipeline {
                 bat 'dir'  // List files to verify checkout
             }
         }
+        
         stage('Terraform') {
             steps {
                 script {
