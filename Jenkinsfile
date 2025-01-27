@@ -47,20 +47,24 @@ pipeline {
                         cd terraform
                         terraform init
                         terraform apply -auto-approve
-                        terraform output -raw public_ip > ec2_public_ip.txt
-                    '''
-                    def ec2Ip = readFile('terraform/ec2_public_ip.txt').trim()
-                    env.EC2_PUBLIC_IP = ec2Ip
                 }
             }
         }
 
+        stage('Generate Hosts File') {
+            steps {
+                bat '''
+                echo [all] > hosts.ini
+                for /f %%i in ('terraform output -raw public_ips') do echo %%i >> hosts.ini
+                type hosts.ini
+                '''
+            }
+        }
+        
         stage('Ansible') {
             steps {
                 script {
                     bat '''
-                        echo [all] > hosts.ini
-                        echo %EC2_PUBLIC_IP% >> hosts.ini
                         ansible-playbook -i hosts.ini install_nginx.yaml --private-key C:\\Users\\your-user\\.ssh\\your-key.pem
                     '''
                 }
