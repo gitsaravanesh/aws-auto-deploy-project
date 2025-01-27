@@ -9,32 +9,32 @@ pipeline {
     stages {
         
         stage('Setup AWS Credentials') {
-        steps {
-        withCredentials([
-            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+            steps {
+            withCredentials([
+                string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
             ]) {
-            bat '''
-            set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
-            set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
-
-            rem Run AWS CLI command and capture output
-            for /F "tokens=*" %%i in ('aws sts get-caller-identity 2>&1') do set OUTPUT=%%i
-            
-            rem Print the output for debugging
-            echo AWS CLI Output: %OUTPUT%
-
-            rem Validate the output contains "Account"
-            echo %OUTPUT% | findstr /C:"Account" >nul
-            if errorlevel 1 (
-                echo AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.
-                exit /b 1
-            )
-            echo AWS credentials are valid: %OUTPUT%
-            '''
+                bat '''
+                set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+    
+                rem Run AWS CLI command and capture output
+                for /F "tokens=*" %%i in ('aws sts get-caller-identity') do set OUTPUT=%%i
+                
+                rem Print the output for debugging
+                echo AWS CLI Output: %OUTPUT%
+    
+                rem Validate the output contains "Account"
+                echo %OUTPUT% | findstr /C:"Account" >nul
+                if errorlevel 1 (
+                    echo AWS credentials are invalid! Please check AWS CLI configuration in Jenkins.
+                    exit /b 1
+                )
+                echo AWS credentials are valid: %OUTPUT%
+                '''
+                }
             }
-          }
-       }
+        }
         
         stage('Checkout Code') {
             steps {
