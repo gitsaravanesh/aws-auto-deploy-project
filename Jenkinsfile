@@ -7,6 +7,22 @@ pipeline {
     }
     
     stages {
+
+         stage('Checkout Code') {
+            steps {
+                script {
+                    checkout scmGit(
+                        branches: [[name: '*/main']],
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            credentialsId: '99b02a4c-674b-4f86-a8d4-268000c947a9',
+                            url: 'https://github.com/gitsaravanesh/aws-auto-deploy-project'
+                        ]]
+                    )
+                }
+                bat 'dir'  // List files to verify checkout
+            }
+        }
         
         stage('Setup AWS Credentials') {
             steps {
@@ -33,22 +49,6 @@ pipeline {
                 echo AWS credentials are valid: %OUTPUT%
                 '''
                 }
-            }
-        }
-        
-        stage('Checkout Code') {
-            steps {
-                script {
-                    checkout scmGit(
-                        branches: [[name: '*/main']],
-                        extensions: [],
-                        userRemoteConfigs: [[
-                            credentialsId: '99b02a4c-674b-4f86-a8d4-268000c947a9',
-                            url: 'https://github.com/gitsaravanesh/aws-auto-deploy-project'
-                        ]]
-                    )
-                }
-                bat 'dir'  // List files to verify checkout
             }
         }
         
