@@ -47,6 +47,7 @@ pipeline {
                         cd terraform
                         terraform init
                         terraform apply -auto-approve
+                        '''
                 }
             }
         }
@@ -63,7 +64,7 @@ pipeline {
         
         stage('Ansible') {
             steps {
-                script {
+                script {    
                     bat '''
                         ansible-playbook -i hosts.ini install_nginx.yaml --private-key C:\\Users\\your-user\\.ssh\\your-key.pem
                     '''
