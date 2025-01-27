@@ -6,6 +6,22 @@ pipeline {
         EC2_PUBLIC_IP = ""
     }
 
+    
+    stage('Setup AWS Credentials') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh '''
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    aws sts get-caller-identity
+                    '''
+                }
+            }
+        }
+    
     stages {
         stage('Validate AWS Credentials') {
             steps {
@@ -18,6 +34,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Checkout Code') {
             steps {
                 script {
