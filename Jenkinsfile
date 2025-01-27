@@ -55,10 +55,10 @@ pipeline {
         stage('Generate Hosts File') {
             steps {
                 bat '''
-                echo [all] > hosts.ini
-                for /f %%i in ('terraform output -raw public_ips -no-color 2^>^&1') do (
-                    echo %%i >> hosts.ini)
-                type hosts.ini
+                    terraform output -raw public_ip > ec2_public_ip.txt
+                    echo [all] > hosts.ini
+                    for /f %%i in (ec2_public_ip.txt) do echo %%i >> hosts.ini
+                    type hosts.ini
                 '''
             }
         }
