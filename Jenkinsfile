@@ -71,13 +71,13 @@ pipeline {
                 script {
                     bat '''
                     wsl --install
+                    '''
                     sh '''
                     rm -rf /home/ansible_project
                     mkdir -p /home/ansible_project    
                     wsl git clone https://github.com/gitsaravanesh/aws-auto-deploy-project.git /home/ansible_project
                     wsl cd /home/ansible_project/aws-auto-deploy-project/ansible
                     wsl pwd
-                    '''
                     '''
                 }
             }
