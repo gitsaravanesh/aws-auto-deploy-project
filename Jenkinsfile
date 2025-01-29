@@ -71,12 +71,9 @@ pipeline {
                 bat '''
                     cd ansible
                 '''
-                ansiblePlaybook(
-                    credentialsId: 'aws-ssh-key',   // SSH Private Key stored in Jenkins
-                    inventory: 'hosts.ini',        // Dynamic inventory file
-                    playbook: 'install_nginx.yaml',        // Your Ansible playbook
-                    colorized: true                // Enables color output in Jenkins logs
-                )
+                script {
+                    sh 'wsl ansible-playbook -i hosts.ini install_nginx.yaml'
+                }
             }
         }
 
