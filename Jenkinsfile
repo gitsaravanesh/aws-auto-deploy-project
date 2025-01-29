@@ -71,8 +71,9 @@ pipeline {
                 script {
                     bat '''
                     wsl --install
-                    wsl mkdir -p /home/ansible_project
-                    wsl git clone https://github.com/your-repo/your-ansible-project.git /home/ansible_project/ansible-repo
+                    mkdir -p /home/ansible_project
+                    sudo apt update && sudo apt install -y git
+                    git clone https://github.com/your-repo/your-ansible-project.git /home/ansible_project/ansible-repo
                     '''
                 }
             }
