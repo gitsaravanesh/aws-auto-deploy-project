@@ -73,7 +73,7 @@ pipeline {
                     wsl --install
                     mkdir -p /home/ansible_project
                     sudo apt update && sudo apt install -y git
-                    git clone https://github.com/your-repo/your-ansible-project.git /home/ansible_project/ansible-repo
+                    git clone https://github.com/gitsaravanesh/aws-auto-deploy-project.git /home/ansible_project
                     '''
                 }
             }
