@@ -68,11 +68,12 @@ pipeline {
         
         stage('Ansible') {
             steps {
-                script {    
-                    bat '''
-                        ansible-playbook -i hosts.ini install_nginx.yaml --private-key C:\\Users\\your-user\\.ssh\\your-key.pem
-                    '''
-                }
+                ansiblePlaybook(
+                    credentialsId: 'aws-ssh-key',   // SSH Private Key stored in Jenkins
+                    inventory: 'hosts.ini',        // Dynamic inventory file
+                    playbook: 'deploy.yml',        // Your Ansible playbook
+                    colorized: true                // Enables color output in Jenkins logs
+                )
             }
         }
 
