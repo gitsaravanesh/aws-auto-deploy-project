@@ -72,8 +72,7 @@ pipeline {
                     bat '''
                     wsl --install
                     wsl rm -rf /home/ansible_project
-                    wsl mkdir -p /home/ansible_project
-                    wsl sudo apt update && sudo apt install -y git
+                    wsl mkdir -p /home/ansible_project    
                     wsl git clone https://github.com/gitsaravanesh/aws-auto-deploy-project.git /home/ansible_project
                     wsl cd /home/ansible_project/aws-auto-deploy-project/ansible
                     wsl pwd
