@@ -84,7 +84,7 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    sh 'wsl ansible-playbook -i hosts.ini install_nginx.yaml'
+                    bat 'wsl ansible-playbook -i hosts.ini install_nginx.yaml'
                 }
             }
         }
