@@ -78,6 +78,7 @@ pipeline {
                     wsl cd /home/ansible_project/aws-auto-deploy-project/ansible
                     wsl pwd
                     '''
+                    '''
                 }
             }
         }
