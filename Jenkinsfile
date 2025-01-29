@@ -74,6 +74,8 @@ pipeline {
                     mkdir -p /home/ansible_project
                     sudo apt update && sudo apt install -y git
                     git clone https://github.com/gitsaravanesh/aws-auto-deploy-project.git /home/ansible_project
+                    cd /home/ansible_project/aws-auto-deploy-project/ansible
+                    pwd
                     '''
                 }
             }
