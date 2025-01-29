@@ -70,6 +70,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    wsl --instal
                     wsl mkdir -p /home/ansible_project
                     wsl git clone https://github.com/your-repo/your-ansible-project.git /home/ansible_project/ansible-repo
                     '''
