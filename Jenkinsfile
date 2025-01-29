@@ -65,12 +65,20 @@ pipeline {
                 '''
             }
         }
+
+        stage('Move Files to WSL') {
+            steps {
+                script {
+                    sh '''
+                    wsl mkdir -p /home/ansible_project
+                    wsl git clone https://github.com/your-repo/your-ansible-project.git /home/ansible_project/ansible-repo
+                    '''
+                }
+            }
+        }
         
         stage('Ansible') {
             steps {
-                bat '''
-                    cd ansible
-                '''
                 script {
                     sh 'wsl ansible-playbook -i hosts.ini install_nginx.yaml'
                 }
