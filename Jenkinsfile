@@ -19,7 +19,8 @@ pipeline {
                     bat 'wsl uname -r'       // Check WSL Kernel version
                     bat 'wsl pwd'            // Print WSL working directory
                     bat 'wsl ansible --version' // Check Ansible
-                    bat 'wsl bash -c "cd /home/ansible-proj/ansible && pwd && ls -l"'
+                    bat 'wsl dir'
+                    bat 'wsl bash -c "cd /home/ansible-proj/ansible && pwd && dir"'
                 }
             }
         }
