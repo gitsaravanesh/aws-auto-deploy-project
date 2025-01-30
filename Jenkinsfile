@@ -77,6 +77,8 @@ pipeline {
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
                 '''
+                cd terraform
+                dir
             }
           }
         }
@@ -87,7 +89,7 @@ pipeline {
                     
                     bat 'cd ansible && dir'
                     bat 'wsl pwd'
-                    bat 'cd terraform && type hosts.ini'
+                    bat 'cd terraform && type hosts.ini && '
                     bat 'cd ansible && type hosts.ini'                    
                     bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
