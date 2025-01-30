@@ -16,8 +16,7 @@ pipeline {
             steps {
                 script {
                     env.WSL_WORKSPACE = sh(script: 'wsl bash -c "echo $PWD"', returnStdout: true).trim()
-                    echo "WSL Workspace Path: ${env.WSL_WORKSPACE}"
-                    
+                    println "Workspace path inside WSL: ${env.WSL_WORKSPACE}"                    
                     checkout scmGit(
                         branches: [[name: '*/main']],
                         extensions: [],
