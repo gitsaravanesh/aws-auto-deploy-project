@@ -60,12 +60,11 @@ pipeline {
                     cd terraform
                     terraform output -raw public_ip > ec2_public_ip.txt
                     type ec2_public_ip.txt
-                    pwd
-                    cd ansible
                     echo [all] > hosts.ini
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
+                    cp hosts.ini ~/ansible-proj/ansible/
                 '''
             }
         }
