@@ -67,6 +67,7 @@ pipeline {
         stage('Generate Hosts File') {
             steps {
                 bat '''
+                    def ansibleDir = "${env.WSL_WORKSPACE}/ansible-proj/ansible"
                     cd terraform
                     terraform output -raw public_ip > ec2_public_ip.txt
                     type ec2_public_ip.txt
@@ -74,7 +75,7 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
-                    move hosts.ini  "${env.WSL_WORKSPACE}/ansible"
+                    move hosts.ini  "${ansibleDir}/"
                 '''
             }
         }
