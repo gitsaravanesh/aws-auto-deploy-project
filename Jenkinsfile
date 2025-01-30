@@ -66,6 +66,7 @@ pipeline {
                     type hosts.ini
                 '''
             }
+        }
 
         stage('Checkout Git Repository') {
             steps {
