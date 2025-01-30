@@ -77,7 +77,6 @@ pipeline {
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
                 '''
-                move hosts.ini  "${ansibleDir}/"
             }
           }
         }
