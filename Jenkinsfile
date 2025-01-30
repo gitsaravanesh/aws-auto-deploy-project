@@ -21,6 +21,8 @@ pipeline {
                     bat 'wsl ansible --version' // Check Ansible
                     bat 'wsl dir'
                     bat 'wsl git --version'
+                    bat 'wsl cd ansible'
+                    bat 'wsl dir'
                 }
             }
         }
