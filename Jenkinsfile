@@ -66,7 +66,7 @@ pipeline {
         stage('Generate Hosts File') {
             steps {
                 script {
-                    def ansibleDir = env.WSL_WORKSPACE ? "${env.WSL_WORKSPACE}/ansible" : "ansible" // Windows paths!
+                    def ansibleDir = "${env.WSL_WORKSPACE.split('/').drop(2).join('/')}/ansible"
                     println "${ansibleDir}"
                     
                     bat '''
