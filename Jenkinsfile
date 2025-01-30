@@ -6,6 +6,8 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key')  
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')  
         EC2_PUBLIC_IP = ""
+        GIT_REPO = 'https://github.com/gitsaravanesh/aws-auto-deploy-project.git'
+        GIT_DIR = '/root/ansible-proj'
     }
     
     stages {
@@ -63,6 +65,41 @@ pipeline {
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
                 '''
+            }
+
+        stage('Checkout Git Repository') {
+            steps {
+                script {
+                    // Change to the directory, create if it doesn't exist
+                    bat 'if not exist "%GIT_DIR%" mkdir "%GIT_DIR%"'
+
+                    // Navigate to the directory
+                    bat "cd %GIT_DIR%"
+
+                    // Initialize Git repository if not already initialized
+                    bat 'git rev-parse --is-inside-work-tree 2>nul || git init'
+
+                    // Add the remote repository if not already added
+                    bat 'git remote get-url origin 2>nul || git remote add origin %GIT_REPO%'
+
+                    // Ensure the correct remote URL is set
+                    bat 'git remote set-url origin %GIT_REPO%'
+
+                    // Fetch the latest changes from the main branch
+                    bat 'git fetch origin main'
+
+                    // Check if the branch exists locally and reset or checkout as needed
+                    bat '''
+                    git show-ref --verify --quiet refs/heads/main && (
+                        git reset --hard origin/main
+                    ) || (
+                        git checkout -b main origin/main
+                    )
+                    '''
+
+                    // Pull the latest changes with rebase
+                    bat 'git pull origin main --rebase'
+                }
             }
         }
 
