@@ -76,9 +76,8 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
+                    dir
                 '''
-                cd terraform
-                dir
             }
           }
         }
