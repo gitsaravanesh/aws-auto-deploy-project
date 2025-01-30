@@ -64,6 +64,7 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
+                    move hosts.ini ~/ansible-proj/ansible/
                 '''
             }
         }
@@ -71,7 +72,6 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    bat 'wsl cd terraform && dir && copy hosts.ini ~/ansible-proj/ansible/'
                     bat 'cd ansible && dir'
                     bat 'wsl pwd'
                     bat 'cd terraform && type hosts.ini'
