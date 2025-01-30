@@ -68,43 +68,17 @@ pipeline {
             }
         }
 
-        stage('Checkout Git Repository') {
-            steps {
-                script {
-                    // Check if the directory exists, create it if it doesn't using WSL
-                    sh 'wsl if [ ! -d "$GIT_DIR" ]; then mkdir -p "$GIT_DIR"; fi'
-
-                    // Navigate to the directory and initialize the git repo if necessary
-                    sh '''
-                    wsl "cd $GIT_DIR && git rev-parse --is-inside-work-tree 2>/dev/null || git init"
-                    wsl "cd $GIT_DIR && git remote get-url origin 2>/dev/null || git remote add origin $GIT_REPO"
-                    wsl "cd $GIT_DIR && git fetch origin main"
-                    wsl "cd $GIT_DIR && git pull origin main --rebase"
-                    '''
-                }
-                }
-            }
-
-        stage('Move Files to WSL') {
-            steps {
-                script {
-                    bat 'dir'
-                    bat 'wsl -e bash -c "ansible --version"'
-                    bat wsl 'git remote get-url origin 2>/dev/null || git remote add origin https://github.com/gitsaravanesh/aws-auto-deploy-project.git'
-                    bat 'wsl git remote -v'
-                    bat 'wsl git pull origin main --rebase'
-                    bat 'dir'
-                }
-            }
-        }
-        
         stage('Ansible') {
             steps {
                 script {
-                    bat 'wsl ansible-playbook -i hosts.ini install_nginx.yaml'
+                    bat 'dir'
+                    bat 'wsl pwd'            // Print WSL working directory
+                    bat 'wsl ansible --version' // Check Ansible
+                    bat 'wsl dir'
+                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
+             }
             }
-        }
 
         stage('CodeDeploy') {
             steps {
