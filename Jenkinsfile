@@ -67,6 +67,7 @@ pipeline {
             steps {
                 script {
                 def ansibleDir = "${env.WSL_WORKSPACE}/ansible"
+                println "${ansibleDir}"
                 bat '''
                     cd terraform
                     terraform output -raw public_ip > ec2_public_ip.txt
@@ -75,9 +76,8 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
-                    println "${ansibleDir}"
-                    move hosts.ini  "${ansibleDir}/"
                 '''
+                move hosts.ini  "${ansibleDir}/"
             }
           }
         }
@@ -85,6 +85,7 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
+                    
                     bat 'cd ansible && dir'
                     bat 'wsl pwd'
                     bat 'cd terraform && type hosts.ini'
