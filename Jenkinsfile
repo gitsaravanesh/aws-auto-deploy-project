@@ -15,6 +15,9 @@ pipeline {
          stage('Checkout Code') {
             steps {
                 script {
+                    env.WSL_WORKSPACE = sh(script: 'wsl bash -c "echo $PWD"', returnStdout: true).trim()
+                    echo "WSL Workspace Path: ${env.WSL_WORKSPACE}"
+                    
                     checkout scmGit(
                         branches: [[name: '*/main']],
                         extensions: [],
@@ -64,7 +67,7 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
-                    move hosts.ini ~/ansible-proj/ansible/
+                    move hosts.ini  ${env.WSL_WORKSPACE}/ansible
                 '''
             }
         }
