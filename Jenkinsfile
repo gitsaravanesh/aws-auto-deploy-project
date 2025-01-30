@@ -15,7 +15,6 @@ pipeline {
         stage('Checkout Git Repository') {
             steps {
                 script {
-                    bat 'pwd'
                     bat 'dir'
                     bat 'wsl pwd'            // Print WSL working directory
                     bat 'wsl ansible --version' // Check Ansible
