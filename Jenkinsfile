@@ -71,7 +71,7 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    bat 'cp ~/terraform/hosts.ini ~/ansible-proj/ansible/'
+                    bat 'wsl cp ~/terraform/hosts.ini ~/ansible-proj/ansible/'
                     bat 'dir'
                     bat 'cd terraform && dir'
                     bat 'cd ansible && dir'
