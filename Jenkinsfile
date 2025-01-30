@@ -70,6 +70,7 @@ pipeline {
             steps {
                 script {
                     bat 'dir'
+                    bat 'wsl -e bash -c "ansible --version"'
                     bat 'wsl git clone https://github.com/your-repo.git ~/ansible-project'
                     bat 'dir'
                 }
