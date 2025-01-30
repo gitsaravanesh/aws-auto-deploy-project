@@ -78,6 +78,8 @@ pipeline {
                     type hosts.ini
                     dir
                 '''
+                println "${ansibleDir}"
+                cd "${ansibleDir}"
             }
           }
         }
