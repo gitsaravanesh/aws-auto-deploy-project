@@ -71,7 +71,9 @@ pipeline {
                 script {
                     bat 'dir'
                     bat 'wsl -e bash -c "ansible --version"'
-                    bat 'wsl git clone https://github.com/your-repo.git ~/ansible-project'
+                    bat 'wsl git remote add origin https://github.com/gitsaravanesh/aws-auto-deploy-project.git'
+                    bat 'wsl git remote -v'
+                    bat 'wsl git pull origin main'
                     bat 'dir'
                 }
             }
