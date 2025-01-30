@@ -15,14 +15,10 @@ pipeline {
         stage('Checkout Git Repository') {
             steps {
                 script {
-                    try {
-                        sh 'wsl --version'       // Ensure WSL is available
-                        sh 'wsl uname -r'       // Check WSL Kernel version
-                        sh 'wsl pwd'            // Print WSL working directory
-                        sh 'wsl ansible --version' // Check Ansible
-                    } catch (Exception e) {
-                        echo "WSL is not available: ${e}"
-                    }
+                    bat 'wsl --version'       // Ensure WSL is installed
+                    bat 'wsl uname -r'       // Check WSL Kernel version
+                    bat 'wsl pwd'            // Print WSL working directory
+                    bat 'wsl ansible --version' // Check Ansible
                 }
             }
         }
