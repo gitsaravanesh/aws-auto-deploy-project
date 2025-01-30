@@ -76,10 +76,9 @@ pipeline {
                     type hosts.ini
                     type ec2_public_ip.txt >> hosts.ini
                     type hosts.ini
-                    dir
                 '''
                 println "${ansibleDir}"
-                cd "${ansibleDir}"
+                bat 'cd "${ansibleDir}" && dir'
             }
           }
         }
@@ -87,10 +86,6 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    
-                    bat 'cd ansible && dir'
-                    bat 'wsl pwd'
-                    bat 'cd terraform && type hosts.ini && '
                     bat 'cd ansible && type hosts.ini'                    
                     bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
