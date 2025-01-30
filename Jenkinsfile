@@ -11,7 +11,6 @@ pipeline {
     }
     
     stages {
-
          stage('Checkout Code') {
             steps {
                 script {                   
@@ -79,8 +78,9 @@ pipeline {
                     move hosts.ini  "${ansibleDir}/"
                 '''
             }
+          }
         }
-
+        
         stage('Ansible') {
             steps {
                 script {
@@ -91,7 +91,7 @@ pipeline {
                     bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
              }
-            }
+        }
 
         stage('CodeDeploy') {
             steps {
@@ -107,5 +107,4 @@ pipeline {
             }
         }
     }
-}
-}
+ }
