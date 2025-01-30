@@ -72,9 +72,11 @@ pipeline {
             steps {
                 script {
                     bat 'dir'
+                    bat 'cd terraform && dir'
+                    bat 'cd ansible && dir'
                     bat 'wsl pwd'            // Print WSL working directory
                     bat 'cd terraform && type hosts.ini'
-                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i C:\Users\raja4\.jenkins\workspace\ansible-terrafo-auto\terraform\hosts.ini install_nginx.yaml"'
+                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
              }
             }
