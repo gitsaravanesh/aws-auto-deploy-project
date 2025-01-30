@@ -14,11 +14,9 @@ pipeline {
 
         stage('Checkout Git Repository') {
             steps {
-                script {
                     sh 'wsl ls'
                     sh 'wsl pwd'
                     sh 'wsl ansible --version'
-                }
                 }
             }
         }
