@@ -15,8 +15,8 @@ pipeline {
         stage('Checkout Git Repository') {
             steps {
                 script {
-                    bat 'wsl --version'       // Ensure WSL is installed
-                    bat 'wsl uname -r'       // Check WSL Kernel version
+                    bat 'pwd'
+                    bat 'dir'
                     bat 'wsl pwd'            // Print WSL working directory
                     bat 'wsl ansible --version' // Check Ansible
                     bat 'wsl dir'
