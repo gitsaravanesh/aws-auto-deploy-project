@@ -20,7 +20,7 @@ pipeline {
                     bat 'wsl pwd'            // Print WSL working directory
                     bat 'wsl ansible --version' // Check Ansible
                     bat 'wsl dir'
-                    bat 'wsl bash -c "cd ansible && pwd && dir"'
+                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
                 }
             }
         }
