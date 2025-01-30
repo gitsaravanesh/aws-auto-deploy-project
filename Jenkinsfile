@@ -14,9 +14,7 @@ pipeline {
 
          stage('Checkout Code') {
             steps {
-                script {
-                    env.WSL_WORKSPACE = sh(script: 'wsl bash -c "echo $PWD"', returnStdout: true).trim()
-                    println "Workspace path inside WSL: ${env.WSL_WORKSPACE}"                    
+                script {                   
                     checkout scmGit(
                         branches: [[name: '*/main']],
                         extensions: [],
@@ -43,6 +41,16 @@ pipeline {
                 }
             }
         }
+        
+        stage('Identify Workspace') {
+            steps {
+                script {
+                    env.WSL_WORKSPACE = sh(script: 'wsl pwd', returnStdout: true).trim()
+                    // Debugging: Print the workspace path inside WSL
+                    println "Workspace path inside WSL: ${env.WSL_WORKSPACE}"
+                }
+            }
+        }        
         
         stage('Terraform') {
             steps {
