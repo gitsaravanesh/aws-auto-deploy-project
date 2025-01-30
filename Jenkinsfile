@@ -79,7 +79,7 @@ pipeline {
                     type hosts.ini
                     '''
                     println "${ansibleDir}"
-                    bat "dir "${ansibleDir}""
+                    bat "cd "${ansibleDir}""
             }
           }
         }
