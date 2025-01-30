@@ -66,8 +66,9 @@ pipeline {
 
         stage('Generate Hosts File') {
             steps {
+                script {
+                def ansibleDir = "${env.WSL_WORKSPACE}/ansible-proj/ansible"
                 bat '''
-                    def ansibleDir = "${env.WSL_WORKSPACE}/ansible-proj/ansible"
                     cd terraform
                     terraform output -raw public_ip > ec2_public_ip.txt
                     type ec2_public_ip.txt
