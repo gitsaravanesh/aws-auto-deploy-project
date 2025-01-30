@@ -45,7 +45,7 @@ pipeline {
         stage('Identify Workspace') {
             steps {
                 script {
-                    env.WSL_WORKSPACE = sh(script: 'wsl pwd', returnStdout: true).trim()
+                    env.WSL_WORKSPACE = bat(script: 'wsl pwd', returnStdout: true).trim()
                     // Debugging: Print the workspace path inside WSL
                     println "Workspace path inside WSL: ${env.WSL_WORKSPACE}"
                 }
