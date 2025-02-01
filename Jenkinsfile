@@ -76,15 +76,14 @@ pipeline {
                     def sourceFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini")
                     def targetFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible\\hosts.ini")
 
-                    targetFile.parentFile.mkdirs() // Ensure target folder exists
-
-                    if (sourceFile.exists()) {
-                        targetFile.delete() // Delete if exists
-                        sourceFile.renameTo(targetFile)
-                        echo "hosts.ini moved successfully!"
-                    } else {
-                        echo "hosts.ini not found!"
-                    }
+                     bat """
+                        if exist "${sourceFile}" (
+                            move /Y "${sourceFile}" "${targetDir}"
+                            echo hosts.ini moved successfully!
+                        ) else (
+                            echo hosts.ini not found!
+                        )
+                    """
                 }
             }
         }
