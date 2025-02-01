@@ -39,18 +39,8 @@ pipeline {
                 '''
                 }
             }
-        }
-        
-        stage('Identify Workspace') {
-            steps {
-                script {
-                    env.WSL_WORKSPACE = bat(script: 'wsl pwd', returnStdout: true).trim()
-                    // Debugging: Print the workspace path inside WSL
-                    println "${env.WSL_WORKSPACE}"
-                }
-            }
         }        
-        
+
         stage('Terraform') {
             steps {
                 script {
@@ -65,10 +55,7 @@ pipeline {
 
         stage('Generate Hosts File') {
             steps {
-                script {
-                    def ansibleDir = env.WSL_WORKSPACE.replaceFirst("^/mnt/c/Users/[^/]+/\\.jenkins/workspace/", "") + "/ansible"
-                    println "${ansibleDir}"
-                    
+                script {                
                     bat '''
                     cd terraform
                     terraform output -raw public_ip > ec2_public_ip.txt
@@ -81,6 +68,25 @@ pipeline {
                     '''                
                 }
           }
+        }
+
+        stage('Move Files') {
+            steps {
+                script {
+                    def sourceFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini")
+                    def targetFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible\\hosts.ini")
+
+                    targetFile.parentFile.mkdirs() // Ensure target folder exists
+
+                    if (sourceFile.exists()) {
+                        targetFile.delete() // Delete if exists
+                        sourceFile.renameTo(targetFile)
+                        echo "hosts.ini moved successfully!"
+                    } else {
+                        echo "hosts.ini not found!"
+                    }
+                }
+            }
         }
         
         stage('Ansible') {
