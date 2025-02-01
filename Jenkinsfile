@@ -91,7 +91,7 @@ pipeline {
             steps {
                 script {
                     bat 'cd ansible && dir'                    
-                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml"'
+                    bat 'wsl bash -c "cd ansible && pwd && dir && ansible-playbook -i hosts.ini install_nginx.yaml --private-key=ansible-key.pem"'
                 }
              }
         }
