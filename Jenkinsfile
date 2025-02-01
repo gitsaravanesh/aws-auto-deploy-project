@@ -72,12 +72,12 @@ pipeline {
         stage('Move Files') {
             steps {
                 script {
-                    def sourceFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini")
-                    def targetFile = new File("C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible\\hosts.ini")
+                    bat """
+                        set SOURCE_FILE=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini
+                        set TARGET_DIR=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible
 
-                     bat """
-                        if exist "${sourceFile}" (
-                            move /Y "${sourceFile}" "${targetDir}"
+                        if exist "%SOURCE_FILE%" (
+                            move /Y "%SOURCE_FILE%" "%TARGET_DIR%"
                             echo hosts.ini moved successfully!
                         ) else (
                             echo hosts.ini not found!
