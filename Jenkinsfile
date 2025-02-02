@@ -8,6 +8,11 @@ pipeline {
         EC2_PUBLIC_IP = ""
         GIT_REPO = 'https://github.com/gitsaravanesh/aws-auto-deploy-project.git'
         GIT_DIR = '/root/ansible-proj'
+        S3_BUCKET = 'codedeploy-auto-s3'
+        S3_FILE = 'program.zip'
+        LOCAL_FILE = 'index.html'
+        DEPLOYMENT_GROUP = 'terra-ansi-auto'
+        APPLICATION_NAME = 'terra-ansi-auto'
     }
     
     stages {
@@ -104,13 +109,17 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
-                    bat '''
-                        aws deploy create-deployment ^
-                            --application-name MyApp ^
-                            --deployment-group-name MyDeploymentGroup ^
-                            --deployment-config-name CodeDeployDefault.OneAtATime ^
-                            --github-location repository=my-github-repo,commitId=latest
+                    powershell '''
+                        Compress-Archive -Path ${LOCAL_FILE} -DestinationPath ${S3_FILE}
                     '''
+                    bat 'aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
+                    
+                    aws deploy create-deployment ^
+                            --application-name ${APPLICATION_NAME} ^
+                            --deployment-group-name ${DEPLOYMENT_GROUP} ^
+                            --revision "revisionType=S3,s3Location={bucket=${S3_BUCKET},key=${S3_FILE},bundleType=zip}" ^
+                            --deployment-config-name CodeDeployDefault.OneAtATime ^
+                            --description "Deploy simple HTML"
                 }
             }
         }
