@@ -45,67 +45,7 @@ pipeline {
                 }
             }
         }        
-
-        stage('Terraform') {
-            steps {
-                script {
-                    bat '''
-                        cd terraform
-                        terraform init
-                        terraform apply -auto-approve
-                        '''
-                }
-            }
-        }
-
-        stage('Generate Hosts File') {
-            steps {
-                script {                
-                    bat '''
-                    cd terraform
-                    terraform output -raw public_ip > ec2_public_ip.txt
-                    type ec2_public_ip.txt
-                    echo [all] > hosts.ini
-                    type hosts.ini
-                    type ec2_public_ip.txt >> hosts.ini
-                    type hosts.ini
-                    '''                
-                }
-          }
-        }
-
-        stage('Move Files') {
-            steps {
-                script {
-                    bat """
-                        set SOURCE_FILE=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini
-                        set TARGET_DIR=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible
-
-                        if exist "%SOURCE_FILE%" (
-                            move /Y "%SOURCE_FILE%" "%TARGET_DIR%"
-                            echo hosts.ini moved successfully!
-                        ) else (
-                            echo hosts.ini not found!
-                        )
-                    """
-                }
-            }
-        }
         
-        stage('Ansible') {
-            steps {
-                script {
-                    bat """
-                        wsl bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
-                        cd ansible && pwd && ls -l && \
-                        ansible-playbook -i hosts.ini install_nginx.yaml \
-                        --private-key=/root/.ssh/ansible-key.pem \
-                        -e 'ansible_user=ubuntu ansible_ssh_common_args=\\\"-o StrictHostKeyChecking=no\\\"'"
-                    """
-                    }
-                }
-             }
-
         stage('CodeDeploy') {
             steps {
                 script {
