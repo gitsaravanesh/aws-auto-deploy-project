@@ -100,7 +100,7 @@ pipeline {
                         -e 'ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"'
                         "
                     '''
-                    ]
+                     }
                 }
              }
 
