@@ -114,8 +114,9 @@ pipeline {
                         \$S3_FILE = '${S3_FILE}'
                         cd codedeploy
                         Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
+                        dir
                     """
-                    bat 'cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
+                    bat 'pwd && cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
                         cd codedeploy
