@@ -95,7 +95,7 @@ pipeline {
                         cd ansible && pwd && ls -l && \
                         ansible-playbook -i hosts.ini install_nginx.yaml \
                         --private-key=/root/.ssh/ansible-key.pem \
-                        -e 'ansible_ssh_common_args=\\\"-o StrictHostKeyChecking=no\\\"'"
+                        -e 'ansible_user=ubuntu ansible_ssh_common_args=\\\"-o StrictHostKeyChecking=no\\\"'"
                     """
                     }
                 }
