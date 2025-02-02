@@ -112,11 +112,13 @@ pipeline {
                     powershell """
                         \$LOCAL_FILE = '${LOCAL_FILE}'
                         \$S3_FILE = '${S3_FILE}'
+                        cd codedeploy
                         Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
                     """
-                    bat 'aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
+                    bat 'cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
+                        cd codedeploy
                         aws deploy create-deployment ^
                             --application-name ${APPLICATION_NAME} ^
                             --deployment-group-name ${DEPLOYMENT_GROUP} ^
@@ -130,6 +132,7 @@ pipeline {
 
                     // Wait for the deployment to complete
                     bat """
+                        cd codedeploy
                         aws deploy get-deployment --deployment-id ${deploymentId}
                     """
                 }
