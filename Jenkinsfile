@@ -90,15 +90,12 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    bat 'cd ansible && dir'
                     bat '''
-                        wsl bash -c "
-                        export ANSIBLE_HOST_KEY_CHECKING=False && \
+                        call wsl bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
                         cd ansible && \
                         ansible-playbook -i hosts.ini install_nginx.yaml \
                         --private-key=~/.ssh/ansible-key.pem \
-                        -e 'ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"'
-                        "
+                        -e 'ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"'"
                     '''
                      }
                 }
