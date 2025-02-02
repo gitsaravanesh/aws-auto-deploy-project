@@ -66,16 +66,7 @@ pipeline {
                             --revision "revisionType=S3,s3Location={bucket=${S3_BUCKET},key=${S3_FILE},bundleType=zip}" ^
                             --deployment-config-name CodeDeployDefault.OneAtATime ^
                             --description "Deploy simple HTML"
-                    """, returnStdout: true).trim()
-
-                    // Extract the deployment ID from the response
-                    def deploymentId = deployment.split(' ')[1]
-
-                    // Wait for the deployment to complete
-                    bat """
-                        cd codedeploy
-                        aws deploy get-deployment --deployment-id ${deploymentId}
-                    """
+                            """, returnStdout: true).trim()
                 }
             }
         }
