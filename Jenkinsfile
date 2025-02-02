@@ -109,17 +109,25 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
-                    powershell '''
-                        Compress-Archive -Path ${LOCAL_FILE} -DestinationPath ${S3_FILE}
-                    '''
+                    powershell 'Compress-Archive -Path ${LOCAL_FILE} -DestinationPath ${S3_FILE}'
                     bat 'aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
-                    aws deploy create-deployment ^
+                    def deployment = bat(script: """
+                        aws deploy create-deployment ^
                             --application-name ${APPLICATION_NAME} ^
                             --deployment-group-name ${DEPLOYMENT_GROUP} ^
                             --revision "revisionType=S3,s3Location={bucket=${S3_BUCKET},key=${S3_FILE},bundleType=zip}" ^
                             --deployment-config-name CodeDeployDefault.OneAtATime ^
                             --description "Deploy simple HTML"
+                    """, returnStdout: true).trim()
+
+                    // Extract the deployment ID from the response
+                    def deploymentId = deployment.split(' ')[1]
+
+                    // Wait for the deployment to complete
+                    bat """
+                        aws deploy get-deployment --deployment-id ${deploymentId}
+                    """
                 }
             }
         }
