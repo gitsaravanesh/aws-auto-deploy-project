@@ -91,12 +91,11 @@ pipeline {
             steps {
                 script {
                     bat 'cd ansible && dir'                    
-                    bat """
+                    bat '''
                         wsl bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
-                        cd ansible && pwd && ls -l && \
-                        ansible-playbook -i hosts.ini install_nginx.yaml \
-                        --private-key=ansible-key.pem -e 'ansible_ssh_common_args=\\\"-o StrictHostKeyChecking=no\\\"'"
-                    """
+                        cd ansible && ansible-playbook -i hosts.ini install_nginx.yaml \
+                        --private-key=~/.ssh/ansible-key.pem -e 'ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"'"
+                    '''
                 }
              }
         }
