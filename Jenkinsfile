@@ -109,7 +109,11 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
-                    powershell 'Compress-Archive -Path ${LOCAL_FILE} -DestinationPath ${S3_FILE}'
+                    powershell """
+                        \$LOCAL_FILE = '${LOCAL_FILE}'
+                        \$S3_FILE = '${S3_FILE}'
+                        Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
+                    """
                     bat 'aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
