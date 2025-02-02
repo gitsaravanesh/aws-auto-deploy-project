@@ -33,7 +33,7 @@ resource "aws_instance" "web_server" {
   ami             = "ami-023a307f3d27ea427" # Change based on your region
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.allow_http.name]
-  key_name        = "ansible-key.pem"
+  key_name        = "ansible-key"
 
   tags = {
     Name = "Terraform-Jenkins-EC2"
