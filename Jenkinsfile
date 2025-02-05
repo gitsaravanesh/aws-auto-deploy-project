@@ -120,7 +120,7 @@ pipeline {
                         dir
                     """
                     
-                    bat 'dir && cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
+                    bat 'cd codedeploy && dir && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
                         cd codedeploy
