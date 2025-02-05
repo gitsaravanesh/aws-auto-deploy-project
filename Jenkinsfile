@@ -117,10 +117,9 @@ pipeline {
                             Remove-Item \$S3_FILE -Force
                         }
                         Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
+                        aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                         dir
                     """
-                    
-                    bat 'cd codedeploy && dir && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
                         cd codedeploy
