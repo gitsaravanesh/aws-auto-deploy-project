@@ -1,13 +1,36 @@
-- name: Install and Start Nginx
+- name: Install and Configure Nginx and CodeDeploy Agent
   hosts: all
   become: yes
   tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
     - name: Install Nginx
       apt:
         name: nginx
         state: present
 
-    - name: Start Nginx
+    - name: Start and enable Nginx service
       service:
         name: nginx
         state: started
+        enabled: yes
+
+    - name: Install dependencies for CodeDeploy Agent
+      apt:
+        name:
+          - ruby-full
+          - wget
+        state: present
+
+    - name: Download CodeDeploy Agent installer
+      get_url:
+        url: "https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install"
+        dest: /home/ubuntu/install
+        mode: '0755'
+      vars:
+        region: "ap-south-1"
+
+    - name: Install CodeDeploy Agent
+      command: sudo /home/ubuntu/install auto
