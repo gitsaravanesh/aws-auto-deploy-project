@@ -109,10 +109,11 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
+                    bat 'wsl dos2unix scripts/start_server.sh'
                     powershell """
                         \$LOCAL_FILE = '${LOCAL_FILE}'
                         \$S3_FILE = '${S3_FILE}'
-                        cd codedeploy
+                        cd codedeploy                        
                         if (Test-Path \$S3_FILE) {
                             Remove-Item \$S3_FILE -Force
                         }
