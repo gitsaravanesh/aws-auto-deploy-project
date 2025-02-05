@@ -113,9 +113,13 @@ pipeline {
                         \$LOCAL_FILE = '${LOCAL_FILE}'
                         \$S3_FILE = '${S3_FILE}'
                         cd codedeploy
+                        if (Test-Path \$S3_FILE) {
+                            Remove-Item \$S3_FILE -Force
+                        }
                         Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
                         dir
                     """
+                    
                     bat 'pwd && cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
