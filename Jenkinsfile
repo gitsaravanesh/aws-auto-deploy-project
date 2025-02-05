@@ -109,7 +109,7 @@ pipeline {
         stage('CodeDeploy') {
             steps {
                 script {
-                    bat 'wsl dos2unix scripts/start_server.sh'
+                    bat 'wsl dos2unix codedeploy/scripts/start_server.sh'
                     powershell """
                         \$LOCAL_FILE = '${LOCAL_FILE}'
                         \$S3_FILE = '${S3_FILE}'
