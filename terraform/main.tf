@@ -34,6 +34,7 @@ resource "aws_instance" "web_server" {
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.allow_http.name]
   key_name        = "ansible-key"
+  iam_instance_profile = "auto-jenkins-ec2-instance"
 
   tags = {
     Name = "Terraform-Jenkins-EC2"
