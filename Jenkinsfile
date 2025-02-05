@@ -45,7 +45,67 @@ pipeline {
                 }
             }
         }        
+
+        stage('Terraform') {
+            steps {
+                script {
+                    bat '''
+                        cd terraform
+                        terraform init
+                        terraform apply -auto-approve
+                        '''
+                }
+            }
+        }
+
+        stage('Generate Hosts File') {
+            steps {
+                script {                
+                    bat '''
+                    cd terraform
+                    terraform output -raw public_ip > ec2_public_ip.txt
+                    type ec2_public_ip.txt
+                    echo [all] > hosts.ini
+                    type hosts.ini
+                    type ec2_public_ip.txt >> hosts.ini
+                    type hosts.ini
+                    '''                
+                }
+          }
+        }
+
+        stage('Move Files') {
+            steps {
+                script {
+                    bat """
+                        set SOURCE_FILE=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini
+                        set TARGET_DIR=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible
+
+                        if exist "%SOURCE_FILE%" (
+                            move /Y "%SOURCE_FILE%" "%TARGET_DIR%"
+                            echo hosts.ini moved successfully!
+                        ) else (
+                            echo hosts.ini not found!
+                        )
+                    """
+                }
+            }
+        }
         
+        stage('Ansible') {
+            steps {
+                script {
+                    bat """
+                        wsl bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
+                        cd ansible && pwd && ls -l && \
+                        ansible-playbook -i hosts.ini install_nginx.yaml \
+                        --private-key=/root/.ssh/ansible-key.pem \
+                        -e 'ansible_user=ubuntu ansible_ssh_common_args=\\\"-o StrictHostKeyChecking=no\\\"'"
+                    """
+                    }
+                }
+             }
+
         stage('CodeDeploy') {
             steps {
                 script {
@@ -54,9 +114,9 @@ pipeline {
                         \$S3_FILE = '${S3_FILE}'
                         cd codedeploy
                         Compress-Archive -Path \$LOCAL_FILE -DestinationPath \$S3_FILE
-                        aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}
                         dir
                     """
+                    bat 'pwd && cd codedeploy && aws s3 cp ${S3_FILE} s3://${S3_BUCKET}/${S3_FILE}'
                     
                     def deployment = bat(script: """
                         cd codedeploy
@@ -66,9 +126,18 @@ pipeline {
                             --revision "revisionType=S3,s3Location={bucket=${S3_BUCKET},key=${S3_FILE},bundleType=zip}" ^
                             --deployment-config-name CodeDeployDefault.OneAtATime ^
                             --description "Deploy simple HTML"
-                            """, returnStdout: true).trim()
+                    """, returnStdout: true).trim()
+
+                    // Extract the deployment ID from the response
+                    def deploymentId = deployment.split(' ')[1]
+
+                    // Wait for the deployment to complete
+                    bat """
+                        cd codedeploy
+                        aws deploy get-deployment --deployment-id ${deploymentId}
+                    """
                 }
             }
-        }
+        } 
     }
  }
