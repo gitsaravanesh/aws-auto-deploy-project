@@ -131,15 +131,9 @@ pipeline {
                             --deployment-config-name CodeDeployDefault.OneAtATime ^
                             --description "Deploy simple HTML"
                     """, returnStdout: true).trim()
+                    
+                    println "Validate the deployment in: ${deployment}"
 
-                    // Extract the deployment ID from the response
-                    def deploymentId = deployment.split(' ')[1]
-
-                    // Wait for the deployment to complete
-                    bat """
-                        cd codedeploy
-                        aws deploy get-deployment --deployment-id ${deploymentId}
-                    """
                 }
             }
         } 
