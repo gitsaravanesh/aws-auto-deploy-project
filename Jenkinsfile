@@ -78,8 +78,8 @@ pipeline {
             steps {
                 script {
                     bat """
-                        set SOURCE_FILE=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\terraform\\hosts.ini
-                        set TARGET_DIR=C:\\Users\\raja4\\.jenkins\\workspace\\ansible-terrafo-auto\\ansible
+                        set SOURCE_FILE=C:\\Users\\raja4\\.jenkins\\workspace\\complete-project\\terraform\\hosts.ini
+                        set TARGET_DIR=C:\\Users\\raja4\\.jenkins\\workspace\\complete-project\\ansible
 
                         if exist "%SOURCE_FILE%" (
                             move /Y "%SOURCE_FILE%" "%TARGET_DIR%"
