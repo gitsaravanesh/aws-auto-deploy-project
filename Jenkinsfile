@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                        wsl bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
+                        wsl -d ubuntu -- bash -c "export ANSIBLE_HOST_KEY_CHECKING=False && \
                         cd ansible && pwd && ls -l && \
                         ansible-playbook -i hosts.ini install_nginx.yaml \
                         --private-key=/root/.ssh/ansible-key.pem \
