@@ -86,6 +86,7 @@ pipeline {
                             echo hosts.ini moved successfully!
                         ) else (
                             echo hosts.ini not found!
+                            exit /b 1
                         )
                     """
                 }
